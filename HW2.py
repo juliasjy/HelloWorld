@@ -20,13 +20,10 @@ def commitTree(args):
     for treeSHA in args.treeSHAs:
         if parentSHA == None:
             cmd = 'git commit-tree ' + treeSHA + '-m "alternative begin"'
-            output = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-            parentSHA = output.stdout.readline()
         else:
             cmd = 'git commit-tree ' + treeSHA + '-p' + parentSHA + '-m "alternative followup"'
-            output = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-            print(output.stdout.read())
-            parentSHA = output.stdout.readline()
+        output = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        parentSHA = output.stdout.readline().split()[0]
     return parentSHA
 
 def updateRef(args, parentSHA):
